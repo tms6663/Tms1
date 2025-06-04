@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>مسابقة كورة</title>
+  <script src="questions.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; direction: rtl; padding: 20px; background-color: #f2f2f2; }
+    #quiz-container { background: white; padding: 20px; border-radius: 10px; max-width: 600px; margin: auto; }
+    .option { margin: 10px 0; }
+    .hidden { display: none; }
+    button { padding: 10px 15px; font-size: 16px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div id="quiz-container">
+    <h2 id="question">...جاري التحميل</h2>
+    <div id="options"></div>
+    <button onclick="nextQuestion()">التالي</button>
+  </div>
+
+  <script>
+    let questions = window.questions || [];
+    let currentIndex = 0;
+
+    function showQuestion() {
+      const q = questions[currentIndex];
+      if (!q) {
+        document.getElementById('question').innerText = "انتهت الأسئلة!";
+        document.getElementById('options').innerHTML = "";
+        return;
+      }
+      document.getElementById('question').innerText = q.question;
+      const optionsHtml = Object.entries(q.options).map(([key, value]) =>
+        \`<div class="option"><label><input type="radio" name="option" value="\${key}"> \${value}</label></div>\`
+      ).join("");
+      document.getElementById('options').innerHTML = optionsHtml;
+    }
+
+    function nextQuestion() {
+      const selected = document.querySelector('input[name="option"]:checked');
+      if (!selected) {
+        alert("الرجاء اختيار إجابة");
+        return;
+      }
+      currentIndex++;
+      showQuestion();
+    }
+
+    window.onload = showQuestion;
+  </script>
+</body>
+</html>
